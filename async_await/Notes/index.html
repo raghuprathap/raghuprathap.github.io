@@ -20,22 +20,19 @@
                 document.head.append(script);
             })
         }
-        let promise = loadScript('./myScript1.js');
-        promise.then((script) => {
-            let promise2 = loadScript('./myScript2.js');
-            promise2.then((script) => {
-                let promise3 = loadScript('./myScript3.js');
-                promise3.then((script) => {
-                    console.log(`Script loaded ${script}`);
-                }, (error) => {
-                    console.log(`Script load error ${error}`);
-                })
-            }, (error) => {
-                console.log(`Script load error ${error}`);
-            })
-        }, (error) => {
-            console.log(`Script load error ${error}`);
-        })
+        async function callLoadScript() {
+            try {
+                await loadScript('./myScript1.js');
+                await loadScript('./myScript2.js');
+                await loadScript('./myScript3.js');
+            } catch (error) {
+                handleError(error);
+            }
+        }
+        callLoadScript();
+        function handleError(error) {
+            console.log(`Some thing went wrong ${error}`);
+        }
 
     </script>
 </body>

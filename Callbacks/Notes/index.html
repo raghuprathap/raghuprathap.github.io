@@ -14,20 +14,23 @@
         function loadScript(src, callback) {
             let script = document.createElement('script');
             script.src = src;
-            script.onload = () => callback(script);
+            script.onload = () => callback(null, script);
             script.onerror = () => callback(new Error(`Script load error for ${src}`))
             document.head.append(script);
         }
         loadScript('./myScript1.js', (error, script) => {
             if (error) {
+                console.log("Error loading script1", error);
                 handleError(error);
             } else {
                 loadScript('./myScript2.js', (error, script) => {
                     if (error) {
+                        console.log("Error loading script2", error);
                         handleError(error);
                     } else {
                         loadScript('./myScript3.js', (error, script) => {
                             if (error) {
+                                console.log("Error loading script3", error);
                                 handleError(error);
                             } else {
 
@@ -38,6 +41,10 @@
                 })
             }
         });
+
+        function handleError(error) {
+            console.log("Something went wrong", error);
+        }
 
     </script>
 </body>
