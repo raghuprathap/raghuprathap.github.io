@@ -10,17 +10,18 @@
 </head>
 
 <body>
+
     <script>
-        function loadScript(src) {
+        /* function loadScript(src) {
             let script = document.createElement('script');
             script.src = src;
             document.head.append(script);
         }
         loadScript('./myScript.js');
-        hello();
+        hello(); */
 
         //fix
-        /* function loadScript(src, callback) {
+        function loadScript(src, callback) {
             let script = document.createElement('script');
             script.src = src;
 
@@ -31,8 +32,10 @@
         loadScript('./myScript.js', function () {
             // the callback runs after the script is loaded
             hello();
-        }); */
+        });
+
     </script>
+
 </body>
 
 </html>

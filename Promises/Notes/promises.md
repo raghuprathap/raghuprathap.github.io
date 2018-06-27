@@ -1,76 +1,78 @@
-*A Promise is a placeholder for a future value*
- 
- - Serves same purpose as callbacks but has nicer syntax and easy to handle errors.
+_A Promise is a placeholder for a future value_
 
- ## Creating a Promise
+- Serves same purpose as callbacks but has nicer syntax and easy to handle errors.
 
- Instantiate a promise by calling `new` On the `Promise` class.
+## Creating a Promise
 
- ```
- const promise = new Promise((resolve, reject) => {
-     //resolve?, reject?
- })
- ```
+Instantiate a promise by calling `new` On the `Promise` class.
+
+```js
+const promise = new Promise((resolve, reject) => {
+  //resolve?, reject?
+});
+```
 
 Inside this inner function we perform our asynchronous processing and then when we are ready we call `resolve()`, like so:
 
-
- ```
-    const promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            console.log('async work completed.');
-            resolve()
-        }, 1000);
-    })
- ```
-
- We usually `return` this promise from a function, like so:
-
+```js
+const promise = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    console.log("async work completed.");
+    resolve();
+  }, 1000);
+});
 ```
+
+We usually `return` this promise from a function, like so:
+
+```js
 function doAsyncTask() {
-    const promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-            console.log('async task completed');
-            resolve()
-        }, 1000);
-    });
-    return promise;
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log("async task completed");
+      resolve();
+    }, 1000);
+  });
+  return promise;
 }
 ```
 
 If there was an error in the async task then we call the `reject()` function like so:
 
-```
+```js
 function doAsyncTask() {
-    const promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-             console.log('async task completed');
-            if(error) {
-                reject();
-            } else {
-                resolve()
-            }
-        }, 1000);
-    });
-    return promise;
+  const promise = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log("async task completed");
+      if (error) {
+        reject();
+      } else {
+        resolve();
+      }
+    }, 1000);
+  });
+  return promise;
 }
 ```
 
 ## Promise Notifications
+
 We can get notified when a promise resolves by attaching a success handler to its `then` function, like so:
 
 `doAsyncTask().then(() => console.log('Task complete'))`
 
 `then` can take two arguments, the second argument is a `error` handler that gets called if the promise is `rejected`, like so:
 
-
-```
-doAsyncTask().then(() => console.log('Task completed'), () => console.log('Task Errored'))
+```js
+doAsyncTask().then(
+  () => console.log("Task completed"),
+  () => console.log("Task Errored")
+);
 ```
 
 Any values we pass to the `resolve` and `reject` functions are passed along to the error and success handlers, like so:
 
-```
+```js
 function doAsyncTask() {
   let error = false;
   return new Promise((resolve, reject) => {
@@ -91,8 +93,7 @@ doAsyncTask().then(val => console.log(val), err => console.error(err));
 
 We can also connect a series of `then` handlers together in a chain, like so:
 
-
-```
+```js
 const prom = Promise.resolve("done");
 prom
   .then(val => {
@@ -103,9 +104,10 @@ prom
 // 'done'
 // 'done2'
 ```
+
 - We have to return something from each `then`, otherwise it doesn't get passed to the next `then`
 
-```
+```js
 const prom = Promise.resolve("done");
 prom
   .then(val => {
@@ -118,7 +120,7 @@ prom
 
 - This is different to forking a promise chain
 
-```
+```js
 const prom = Promise.resolve("done");
 prom.then(val => {
   console.log(val);
@@ -128,9 +130,10 @@ prom.then(val => console.log(val)); // <-- Doesn't get passed the result of the 
 // 'done'
 // 'done'
 ```
+
 We can also pause execution waiting for another promise to resolve
 
-```
+```js
 Promise.resolve("done")
   .then(val => {
     console.log(val);
@@ -140,6 +143,7 @@ Promise.resolve("done")
 ```
 
 ## Error Handling
+
 Promises pass an error along the chain till it finds an error handler. So we don't need to define an error handler for each `then` function, we can just add one at the end like so:
 
 ```
@@ -169,6 +173,7 @@ Promise.resolve("done")
   .then(val => console.log(val), err => console.error(err));
 // [Error: fail]
 ```
+
 The `catch` function works exactly the same way as the `then` error handler, it's just clearer and more explicitly describes our intent to handle errors.
 
 ```
@@ -178,20 +183,18 @@ Promise.resolve("done")
   })
   .then(val => console.log(val))
   .catch(err => console.error(err));
-  ```
+```
 
-  ## Finally
-  The finally() method can be useful if you want to do some processing or cleanup once the promise is settled, regardless of its outcome.
+## Finally
 
-  ```
-  Promise.resolve("done")
-  .then(val => {
-    throw new Error("fail");
-  })
-  .then(val => console.log(val))
-  .catch(err => console.error(err))
-  .finally(_ => console.log("Cleaning Up")); // <-- Comming soon!
-  ```
+The finally() method can be useful if you want to do some processing or cleanup once the promise is settled, regardless of its outcome.
 
-
-
+```
+Promise.resolve("done")
+.then(val => {
+  throw new Error("fail");
+})
+.then(val => console.log(val))
+.catch(err => console.error(err))
+.finally(_ => console.log("Cleaning Up")); // <-- Comming soon!
+```
